@@ -52,14 +52,16 @@ namespace Translator
         System.Threading.Thread.Sleep(1000); // wait until ask again
       } while (progress < 100);
 
+      // status is returning 100%, inform the user
       NotifyUser("Excel file created.");
       progressBar1.Value = 100;
       System.Threading.Thread.Sleep(1000); // so this last message appears...
 
       // download results
       byte[] file = await Server.Download(guid);
-      File.WriteAllBytes(FilePath.Replace(".rvt", ".xls"), file);
+      File.WriteAllBytes(FilePath.Replace(".rvt", ".xls"), file); // use same name as RVT, just replace extension
 
+      // restore window
       WindowState = FormWindowState.Normal;
     }
 
@@ -92,6 +94,7 @@ namespace Translator
     {
       if (progressBar1.Value < 100)
       {
+        // prevent closing the app before it reaches 100%
         DialogResult res = MessageBox.Show(
           "If you close the application, it will not download the results. Proceed?",
           "Are you sure?",

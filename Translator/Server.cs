@@ -13,6 +13,9 @@ namespace Translator
 {
   public static class Server
   {
+    /// <summary>
+    /// List of endpoints on the TranslatorServer that this app will use
+    /// </summary>
     private struct EndPoints
     {
       public static string BaseURL { get { return ConfigurationManager.AppSettings["TranslatorServer"]; } }
@@ -21,6 +24,11 @@ namespace Translator
       public const string XLS = "api/forge/translator/{guid}/xls";
     }
 
+    /// <summary>
+    /// Upload the specified file and return the GUID that identifies it on the server
+    /// </summary>
+    /// <param name="filePath"></param>
+    /// <returns></returns>
     public static async Task<string> UploadFile(string filePath)
     {
       var client = new RestClient(EndPoints.BaseURL);
@@ -33,6 +41,11 @@ namespace Translator
       return JsonConvert.DeserializeObject<string>(response.Content);
     }
 
+    /// <summary>
+    /// Check the translation status for this GUID
+    /// </summary>
+    /// <param name="guid"></param>
+    /// <returns></returns>
     public static async Task<int> GetTranslationStatus(string guid)
     {
       var client = new RestClient(EndPoints.BaseURL);
@@ -44,11 +57,17 @@ namespace Translator
       return JsonConvert.DeserializeObject<int>(response.Content);
     }
 
+    /// <summary>
+    /// Download the Excel file for a given GUID
+    /// </summary>
+    /// <param name="guid"></param>
+    /// <returns></returns>
     public static async Task<byte[]> Download(string guid)//, string destinationFolder)
     {
       var client = new RestClient(EndPoints.BaseURL);
       var request = new RestRequest(EndPoints.XLS.Replace("{guid}", guid), Method.GET);
 
+      // This checking process needs improvement
       IRestResponse response;
       do
       {
@@ -56,6 +75,8 @@ namespace Translator
         response = await client.ExecuteTaskAsync(request);
       } while (response.StatusCode != System.Net.HttpStatusCode.OK);
 
+      // the RestSharp library don't return the request status
+      // when downloading files
       return client.DownloadData(request);
     }
   }

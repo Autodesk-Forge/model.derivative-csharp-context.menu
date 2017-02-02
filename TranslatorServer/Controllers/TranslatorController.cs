@@ -35,7 +35,7 @@ namespace TranslatorServer.Controllers
       var fileSavePath = Path.Combine(HttpContext.Current.Server.MapPath("~/App_Data"), bucketKey, file.FileName);
       if (!Directory.Exists(fileSavePath)) Directory.CreateDirectory(fileSavePath);
       file.SaveAs(fileSavePath);
-      
+
       try
       {
         // authenticate with Forge
@@ -69,7 +69,7 @@ namespace TranslatorServer.Controllers
              JobPayloadItem.ViewsEnum._3d
            })
         };
-        JobPayload job = new JobPayload(new JobPayloadInput(Utils.Base64Encode( uploadedObj.objectId)), new JobPayloadOutput(outputs));
+        JobPayload job = new JobPayload(new JobPayloadInput(Utils.Base64Encode(uploadedObj.objectId)), new JobPayloadOutput(outputs));
         DerivativesApi derivative = new DerivativesApi();
         derivative.Configuration.AccessToken = oauth.access_token;
         dynamic jobPosted = await derivative.TranslateAsync(job);
@@ -81,7 +81,7 @@ namespace TranslatorServer.Controllers
         // which is not a good idea in production
         throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message + ex.InnerException));
       }
-      
+
       // cleanup server
       File.Delete(fileSavePath);
 
@@ -126,7 +126,8 @@ namespace TranslatorServer.Controllers
 
       string objectId = string.Empty;
       string objectKey = string.Empty;
-      foreach (KeyValuePair<string, dynamic> objInfo in new DynamicDictionaryItems(objectsInBucket.items)) {
+      foreach (KeyValuePair<string, dynamic> objInfo in new DynamicDictionaryItems(objectsInBucket.items))
+      {
         objectId = objInfo.Value.objectId;
         objectKey = objInfo.Value.objectKey;
       }
@@ -134,7 +135,7 @@ namespace TranslatorServer.Controllers
       string xlsFileName = objectKey.Replace(".rvt", ".xls");
       var xlsPath = Path.Combine(HttpContext.Current.Server.MapPath("~/App_Data"), guid, xlsFileName);
       if (File.Exists(xlsPath))
-        return SendFile(xlsPath);
+        return SendFile(xlsPath);// if the Excel file was already generated
 
       DerivativesApi derivative = new DerivativesApi();
       derivative.Configuration.AccessToken = oauth.access_token;
@@ -155,17 +156,17 @@ namespace TranslatorServer.Controllers
 
           List<long> ids = GetAllElements(categoryOfElements.Value.objects);
           int row = 1;
-          foreach(long id in ids)
+          foreach (long id in ids)
           {
             Dictionary<string, object> props = GetProperties(id, properties);
             int collumn = 0;
-            foreach(KeyValuePair<string, object> prop in props)
+            foreach (KeyValuePair<string, object> prop in props)
             {
               sheet.Cells[0, collumn] = new Cell(prop.Key.ToString());
               sheet.Cells[row, collumn] = new Cell(prop.Value.ToString());
               collumn++;
             }
-           
+
             row++;
           }
 
@@ -176,7 +177,13 @@ namespace TranslatorServer.Controllers
       return SendFile(xlsPath);
     }
 
-    private Dictionary<string, object> GetProperties (long id , dynamic properties)
+    /// <summary>
+    /// Get a list of properties for a given ID
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="properties"></param>
+    /// <returns></returns>
+    private Dictionary<string, object> GetProperties(long id, dynamic properties)
     {
       Dictionary<string, object> returnProps = new Dictionary<string, object>();
       foreach (KeyValuePair<string, dynamic> objectProps in new DynamicDictionaryItems(properties.data.collection))
@@ -201,6 +208,11 @@ namespace TranslatorServer.Controllers
       return returnProps;
     }
 
+    /// <summary>
+    /// Recursively run through the list of objects hierarchy getting alls IDs with no children
+    /// </summary>
+    /// <param name="objects"></param>
+    /// <returns></returns>
     private List<long> GetAllElements(dynamic objects)
     {
       List<long> ids = new List<long>();
@@ -218,11 +230,16 @@ namespace TranslatorServer.Controllers
           if (!ids.Contains(element.Value.objectid))
             ids.Add(element.Value.objectid);
         }
-         
+
       }
       return ids;
     }
 
+    /// <summary>
+    /// Prepare a HTTP Response with a file for download
+    /// </summary>
+    /// <param name="xlsPath"></param>
+    /// <returns></returns>
     public HttpResponseMessage SendFile(string xlsPath)
     {
       HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
@@ -236,16 +253,22 @@ namespace TranslatorServer.Controllers
       return result;
     }
 
+
+    /// <summary>
+    /// Request a 2-legged token
+    /// </summary>
+    /// <param name="scopes"></param>
+    /// <returns></returns>
     public static async Task<dynamic> Get2LeggedTokenAsync(Scope[] scopes)
     {
-        TwoLeggedApi apiInstance = new TwoLeggedApi();
-        string grantType = "client_credentials";
-        dynamic bearer = await apiInstance.AuthenticateAsync(
-          Utils.GetAppSetting("FORGE_CLIENT_ID"),
-          Utils.GetAppSetting("FORGE_CLIENT_SECRET"),
-          grantType,
-          scopes);
-        return bearer;
+      TwoLeggedApi apiInstance = new TwoLeggedApi();
+      string grantType = "client_credentials";
+      dynamic bearer = await apiInstance.AuthenticateAsync(
+        Utils.GetAppSetting("FORGE_CLIENT_ID"),
+        Utils.GetAppSetting("FORGE_CLIENT_SECRET"),
+        grantType,
+        scopes);
+      return bearer;
     }
   }
 }

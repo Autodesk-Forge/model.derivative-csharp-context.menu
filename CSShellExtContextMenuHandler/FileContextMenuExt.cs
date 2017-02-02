@@ -64,6 +64,7 @@ namespace CSShellExtContextMenuHandler
 
     void OnVerbDisplayFileName(IntPtr hWnd)
     {
+      // start the Translator.exe at the same folder as this DLL
       Process.Start(
         string.Format("\"{0}\"", Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\Translator.exe")),
         string.Format("\"{0}\"", this.selectedFile));

@@ -8,11 +8,20 @@ namespace TranslatorServer.Controllers
 {
   public static class Utils
   {
+    /// <summary>
+    /// Read config information on the web.config file
+    /// </summary>
+    /// <param name="settingKey"></param>
+    /// <returns></returns>
     public static string GetAppSetting(string settingKey)
     {
       return WebConfigurationManager.AppSettings[settingKey];
     }
 
+    /// <summary>
+    /// Generate a GUID based random name for the bucket
+    /// </summary>
+    /// <returns></returns>
     public static string GenerateRandomBucketName()
     {
       // the "t" at the begining is in case the GUID starts with number

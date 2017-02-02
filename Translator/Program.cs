@@ -21,7 +21,6 @@ namespace Translator
       string filePath = (args.Length == 0 ? AskUserForFile() : args[0]);
       if (!File.Exists(filePath))
       {
-        MessageBox.Show(filePath + File.Exists(filePath));
         return; // minimum error check...
       }
 

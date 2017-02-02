@@ -21,6 +21,22 @@ This sample will add a Windows Explorer context menu "Extract Properties" for Re
 
 See [this video demonstration](https://www.youtube.com/watch?v=RNMJKjLdLS4).
 
+The new option should appear on the Windows Explorer right-click context menu:
+
+![](menu.png)
+
+A notification ballon indicate the overall process:
+
+![](notifications.png)
+
+# Security
+
+Your Forge Client ID & Secret **should never** be exposed or embedded on a desktop application, it is never safe. Your write-enabled token should also not be send to a desktop application. There are several articles about that available on the web.
+
+This sample keeps all Forge related information on the **TranslationServer** and only send a random GUID to the desktop application (**Transaltor.exe**) that expires after 24 hours (same as [Transient Bucket retention policy](https://developer.autodesk.com/en/docs/data/v2/overview/retention-policy/)). The desktop app keeps this GUID in memory and use it to request the status (progress) and download the Excel file when it's done. 
+
+As of now, this sample don't implement a authentication between desktop and server app, so it should be hosted on a HTTPS server host to prevent possible interceptions during the transit of information. The GUID is transmited as URL (query string), which is visible to proxy servers and represents a possible breach.
+
 # Setup
 
 Install [Visual Studio 2015](https://www.visualstudio.com/).
@@ -29,7 +45,7 @@ Clone this project or download it. It's recommended to install [GitHub desktop](
 
     git clone https://github.com/autodesk-forge/model.derivative-csharp-context.menu
 
-For using this sample, you need an Autodesk developer credentials. Visit the [Forge Developer Portal](https://developer.autodesk.com), sign up for an account, then [create an app](https://developer.autodesk.com/myapps/create). For this new app, use **http://localhost:58966/autodeskcallback.aspx** as Callback URL. Finally take note of the **Client ID** and **Client Secret**.
+For using this sample, you need an Autodesk developer credentials. Visit the [Forge Developer Portal](https://developer.autodesk.com), sign up for an account, then [create an app](https://developer.autodesk.com/myapps/create) that uses Data Management and Model Derivative APIs. For this new app, use **http://localhost:3000/api/forge/callback/oauth** as Callback URL, although is not used on 2-legged flow. Finally take note of the **Client ID** and **Client Secret**.
 
 At the **TranslatorServer** project, open the **web.config** file and adjust the appSettings:
 
@@ -54,15 +70,14 @@ Right-click on a .RVT file and select the "Extract Properties" menu option, it s
 
 The **TranslatorServer** should be deployed to a ASP.NET compatible host, like Azure or Appharbor. For Appharbor deployment, following [this steps to configure your Forge Client ID & Secret](http://adndevblog.typepad.com/cloud_and_mobile/2017/01/deploying-forge-aspnet-samples-to-appharbor.html).
 
-Adjust the **Translator** desktop app web.config with the server address:
+Adjust the **Translator** desktop app app.config with the server address:
 
 ```xml
 <appSettings>
-   <add key="TranslatorServer" value="http://YOUR_DOMAIN_NAME.COM"/>
+   <add key="TranslatorServer" value="https://YOUR_DOMAIN_NAME.COM"/>
 </appSettings>
 ```
 
 ## Written by
 
-Augusto Goncalves (Forge Partner Development)<br />
-http://forge.autodesk.com<br />
+Augusto Goncalves [Forge Partner Development](http://forge.autodesk.com)
