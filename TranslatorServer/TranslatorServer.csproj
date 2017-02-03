@@ -99,8 +99,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="App_Start\ExceptionHandling.cs" />
     <Compile Include="Controllers\TranslatorController.cs" />
-    <Compile Include="Controllers\Utils.cs" />
+    <Compile Include="App_Start\Utils.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

@@ -1,24 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Http;
+﻿using System.Web.Http;
+using System.Web.Http.ExceptionHandling;
 
 namespace TranslatorServer
 {
-    public static class WebApiConfig
+  public static class WebApiConfig
+  {
+    public static void Register(HttpConfiguration config)
     {
-        public static void Register(HttpConfiguration config)
-        {
-            // Web API configuration and services
+      // track erros globally, see ExceptionHandling.cs
+      config.Services.Replace(typeof(IExceptionHandler), new ExceptionHandler());
+      config.Services.Replace(typeof(IExceptionLogger), new ExceptionLogger());
 
-            // Web API routes
-            config.MapHttpAttributeRoutes();
-
-            config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
-            );
-        }
+      // Web API routes
+      config.MapHttpAttributeRoutes();
     }
+  }
 }

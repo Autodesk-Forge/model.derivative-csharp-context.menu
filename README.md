@@ -33,9 +33,7 @@ A notification ballon indicate the overall process:
 
 Your Forge Client ID & Secret **should never** be exposed or embedded on a desktop application, it is never safe. Your write-enabled token should also not be send to a desktop application. There are several articles about that available on the web.
 
-This sample keeps all Forge related information on the **TranslationServer** and only send a random GUID to the desktop application (**Transaltor.exe**) that expires after 24 hours (same as [Transient Bucket retention policy](https://developer.autodesk.com/en/docs/data/v2/overview/retention-policy/)). The desktop app keeps this GUID in memory and use it to request the status (progress) and download the Excel file when it's done. 
-
-As of now, this sample don't implement a authentication between desktop and server app, so it should be hosted on a HTTPS server host to prevent possible interceptions during the transit of information. The GUID is transmited as URL (query string), which is visible to proxy servers and represents a possible breach.
+This sample keeps all Forge related information on the **TranslationServer** and only send a random GUID to the desktop application (**Transaltor.exe**) that expires after 24 hours (same as [Transient Bucket retention policy](https://developer.autodesk.com/en/docs/data/v2/overview/retention-policy/)). The desktop app keeps this GUID in memory and use it to request the status (progress) and download the Excel file when it's done.
 
 # Setup
 

@@ -88,17 +88,25 @@ namespace TranslatorServer.Controllers
       return bucketKey;
     }
 
-    [HttpGet]
-    [Route("api/forge/translator/{guid}")]
-    public async Task<int> FileReady(string guid)
+    public class RequestModel
     {
+      public string guid { get; set; }
+    }
+
+    [HttpPost]
+    [Route("api/forge/translator/status")]
+    public async Task<int> TranslationProgress([FromBody] RequestModel request)
+    {
+      Guid testOutput;
+      if (string.IsNullOrWhiteSpace(request.guid) || !Guid.TryParse(request.guid.TrimStart('t'), out testOutput)) throw new System.Exception("Invalid GUID");
+
       // authenticate with Forge
       dynamic oauth = await Get2LeggedTokenAsync(new Scope[] { Scope.DataRead });
 
       // get object on the bucket, should be just 1
       ObjectsApi objects = new ObjectsApi();
       objects.Configuration.AccessToken = oauth.access_token;
-      dynamic objectsInBucket = await objects.GetObjectsAsync(guid);
+      dynamic objectsInBucket = await objects.GetObjectsAsync(request.guid);
 
       string objectId = string.Empty;
       foreach (KeyValuePair<string, dynamic> objInfo in new DynamicDictionaryItems(objectsInBucket.items))
@@ -112,17 +120,20 @@ namespace TranslatorServer.Controllers
       return (string.IsNullOrWhiteSpace(Regex.Match(manifest.progress, @"\d+").Value) ? 100 : Int32.Parse(Regex.Match(manifest.progress, @"\d+").Value));
     }
 
-    [HttpGet]
-    [Route("api/forge/translator/{guid}/xls")]
-    public async Task<HttpResponseMessage> GetSpreadsheet(string guid)
+    [HttpPost]
+    [Route("api/forge/translator/xls")]
+    public async Task<HttpResponseMessage> GetSpreadsheet([FromBody] RequestModel request)
     {
+      Guid testOutput;
+      if (string.IsNullOrWhiteSpace(request.guid) || Guid.TryParse(request.guid.TrimStart('t'), out testOutput)) throw new System.Exception("Invalid GUID");
+
       // authenticate with Forge
       dynamic oauth = await Get2LeggedTokenAsync(new Scope[] { Scope.DataRead });
 
       // get object on the bucket, should be just 1
       ObjectsApi objects = new ObjectsApi();
       objects.Configuration.AccessToken = oauth.access_token;
-      dynamic objectsInBucket = await objects.GetObjectsAsync(guid);
+      dynamic objectsInBucket = await objects.GetObjectsAsync(request.guid);
 
       string objectId = string.Empty;
       string objectKey = string.Empty;
@@ -133,7 +144,7 @@ namespace TranslatorServer.Controllers
       }
 
       string xlsFileName = objectKey.Replace(".rvt", ".xls");
-      var xlsPath = Path.Combine(HttpContext.Current.Server.MapPath("~/App_Data"), guid, xlsFileName);
+      var xlsPath = Path.Combine(HttpContext.Current.Server.MapPath("~/App_Data"), request.guid, xlsFileName);
       if (File.Exists(xlsPath))
         return SendFile(xlsPath);// if the Excel file was already generated
 

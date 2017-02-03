@@ -18,10 +18,11 @@ namespace Translator
     /// </summary>
     private struct EndPoints
     {
+      // ToDo: obfuscate these strings to avoid reflection
       public static string BaseURL { get { return ConfigurationManager.AppSettings["TranslatorServer"]; } }
       public const string Upload = "api/forge/translator/uploadFile";
-      public const string Status = "api/forge/translator/{guid}";
-      public const string XLS = "api/forge/translator/{guid}/xls";
+      public const string Status = "api/forge/translator/status";
+      public const string XLS = "api/forge/translator/xls";
     }
 
     /// <summary>
@@ -31,6 +32,7 @@ namespace Translator
     /// <returns></returns>
     public static async Task<string> UploadFile(string filePath)
     {
+      /*
       var client = new RestClient(EndPoints.BaseURL);
       var request = new RestRequest(EndPoints.Upload, Method.PUT);
       request.AddFile("FileToTranslate", File.ReadAllBytes(filePath), Path.GetFileName(filePath));
@@ -39,6 +41,8 @@ namespace Translator
         throw new System.Exception("Error uploading file: " + response.StatusCode);
 
       return JsonConvert.DeserializeObject<string>(response.Content);
+      */
+      return "tc376924e751c4fb2b5bff6a4cdee8c8d";
     }
 
     /// <summary>
@@ -49,7 +53,8 @@ namespace Translator
     public static async Task<int> GetTranslationStatus(string guid)
     {
       var client = new RestClient(EndPoints.BaseURL);
-      var request = new RestRequest(EndPoints.Status.Replace("{guid}", guid), Method.GET);
+      var request = new RestRequest(EndPoints.Status, Method.POST);
+      request.AddParameter("guid", guid);
       IRestResponse response = await client.ExecuteTaskAsync(request);
       if (response.StatusCode != System.Net.HttpStatusCode.OK)
         return -1;// throw new System.Exception("Cannot get translation status: " + response.StatusCode);
@@ -65,7 +70,8 @@ namespace Translator
     public static async Task<byte[]> Download(string guid)//, string destinationFolder)
     {
       var client = new RestClient(EndPoints.BaseURL);
-      var request = new RestRequest(EndPoints.XLS.Replace("{guid}", guid), Method.GET);
+      var request = new RestRequest(EndPoints.XLS, Method.GET);
+      request.AddParameter("guid", guid);
 
       // This checking process needs improvement
       IRestResponse response;
