@@ -13,9 +13,9 @@ This sample will add a Windows Explorer context menu "Extract Properties" for Re
 
 **1. CSShellExtContextMenuHandler**: Class Library (.DLL) that implement the required COM interface to extend the Windows Explorer context menu. The original source code is available at this [Code Project article](https://www.codeproject.com/articles/174369/how-to-write-windows-shell-extension-with-net-lang).
 
-**2. Translator**: WinForm .EXE that contains a basic interface and handles upload of files, download of resuls and notifications.
+**2. Translator**: WinForm .EXE that contains a basic interface and handles upload of files, download of results and notifications.
 
-**3. TranslatorServer**: ASP.NET project that handles all Forge related tasks, hidding those operations from the end-user. Forge Client ID & Secret are used here.
+**3. TranslatorServer**: ASP.NET project that handles all Forge related tasks, hiding those operations from the end-user. Forge Client ID & Secret are used here.
 
 ## Demonstration
 
