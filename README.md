@@ -7,8 +7,6 @@
 
 # Description
 
-**IMPORTANT**: This still a work in progress, this sample is not yet fully tested. Use carefully, please. 
-
 This sample will add a Windows Explorer context menu "Extract Properties" for Revit files. The desktop app will upload the .RVT to the Forge Model Derivative API, translate and extract all properties into a Excel file. It was written in C# for Windows (tested on Windows 10) and it includes 3 projects: 
 
 **1. CSShellExtContextMenuHandler**: Class Library (.DLL) that implement the required COM interface to extend the Windows Explorer context menu. The original source code is available at this [Code Project article](https://www.codeproject.com/articles/174369/how-to-write-windows-shell-extension-with-net-lang).
@@ -29,11 +27,13 @@ A notification ballon indicate the overall process:
 
 ![](notifications.png)
 
+When ready, the Excel file will be downloaded to the same folder as the original Revit file.
+
 # Security
 
 Your Forge Client ID & Secret **should never** be exposed or embedded on a desktop application, it is never safe. Your write-enabled token should also not be send to a desktop application. There are several articles about that available on the web.
 
-This sample keeps all Forge related information on the **TranslationServer** and only send a random GUID to the desktop application (**Transaltor.exe**) that expires after 24 hours (same as [Transient Bucket retention policy](https://developer.autodesk.com/en/docs/data/v2/overview/retention-policy/)). The desktop app keeps this GUID in memory and use it to request the status (progress) and download the Excel file when it's done.
+This sample keeps all Forge related information on the **TranslationServer** and only send a random GUID to the desktop application (**Transaltor.exe**) that allow access to the resulting Excel and expires after 24 hours (same as [Transient Bucket retention policy](https://developer.autodesk.com/en/docs/data/v2/overview/retention-policy/)). The desktop app keeps this GUID in memory and use it to request the status (progress) and download the Excel file when it's done.
 
 # Setup
 
@@ -45,7 +45,7 @@ Clone this project or download it. It's recommended to install [GitHub desktop](
 
 For using this sample, you need an Autodesk developer credentials. Visit the [Forge Developer Portal](https://developer.autodesk.com), sign up for an account, then [create an app](https://developer.autodesk.com/myapps/create) that uses Data Management and Model Derivative APIs. For this new app, use **http://localhost:3000/api/forge/callback/oauth** as Callback URL, although is not used on 2-legged flow. Finally take note of the **Client ID** and **Client Secret**.
 
-At the **TranslatorServer** project, open the **web.config** file and adjust the appSettings:
+At the **TranslatorServer** project, open the **web.config** file and adjust the appSettings (for deployment, use host settings instead):
 
 ```xml
 <appSettings>
@@ -76,6 +76,11 @@ Adjust the **Translator** desktop app app.config with the server address:
 </appSettings>
 ```
 
+# License
+
+This sample is licensed under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+Please see the [LICENSE](LICENSE) file for full details.
+
 ## Written by
 
-Augusto Goncalves [Forge Partner Development](http://forge.autodesk.com)
+Augusto Goncalves [@augustomaia](https://twitter.com/augustomaia), [Forge Partner Development](http://forge.autodesk.com)
