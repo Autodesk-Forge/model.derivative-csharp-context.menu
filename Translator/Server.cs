@@ -32,7 +32,6 @@ namespace Translator
     /// <returns></returns>
     public static async Task<string> UploadFile(string filePath)
     {
-      /*
       var client = new RestClient(EndPoints.BaseURL);
       var request = new RestRequest(EndPoints.Upload, Method.PUT);
       request.AddFile("FileToTranslate", File.ReadAllBytes(filePath), Path.GetFileName(filePath));
@@ -41,8 +40,6 @@ namespace Translator
         throw new System.Exception("Error uploading file: " + response.StatusCode);
 
       return JsonConvert.DeserializeObject<string>(response.Content);
-      */
-      return "tc376924e751c4fb2b5bff6a4cdee8c8d";
     }
 
     /// <summary>
