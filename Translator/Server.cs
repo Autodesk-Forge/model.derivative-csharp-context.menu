@@ -67,7 +67,7 @@ namespace Translator
     public static async Task<byte[]> Download(string guid)//, string destinationFolder)
     {
       var client = new RestClient(EndPoints.BaseURL);
-      var request = new RestRequest(EndPoints.XLS, Method.GET);
+      var request = new RestRequest(EndPoints.XLS, Method.POST);
       request.AddParameter("guid", guid);
 
       // This checking process needs improvement

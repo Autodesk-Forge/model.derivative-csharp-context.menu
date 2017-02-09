@@ -125,7 +125,7 @@ namespace TranslatorServer.Controllers
     public async Task<HttpResponseMessage> GetSpreadsheet([FromBody] RequestModel request)
     {
       Guid testOutput;
-      if (string.IsNullOrWhiteSpace(request.guid) || Guid.TryParse(request.guid.TrimStart('t'), out testOutput)) throw new System.Exception("Invalid GUID");
+      if (string.IsNullOrWhiteSpace(request.guid) || !Guid.TryParse(request.guid.TrimStart('t'), out testOutput)) throw new System.Exception("Invalid GUID");
 
       // authenticate with Forge
       dynamic oauth = await Get2LeggedTokenAsync(new Scope[] { Scope.DataRead });
