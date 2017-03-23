@@ -51,7 +51,7 @@ namespace TranslatorServer.Controllers
       // save the file on the server
       string bucketKey = Utils.GenerateRandomBucketName();
       var fileSavePath = Path.Combine(HttpContext.Current.Server.MapPath("~/App_Data"), bucketKey, file.FileName);
-      if (!Directory.Exists(fileSavePath)) Directory.CreateDirectory(fileSavePath);
+      if (!Directory.Exists(fileSavePath)) Directory.CreateDirectory(Path.GetDirectoryName(fileSavePath));
       file.SaveAs(fileSavePath);
 
       try
