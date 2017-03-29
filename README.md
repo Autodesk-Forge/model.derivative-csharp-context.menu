@@ -64,6 +64,8 @@ Run should start the **TranslatorServer** web app.
 
 Right-click on a .RVT file and select the "Extract Properties" menu option, it should trigger the "Translator.exe" on the same folder as the DLL. 
 
+[This video](https://www.youtube.com/watch?v=Vu8yAhmZUb0) demonstrates how to run it locally. 
+
 # Deployment
 
 The **TranslatorServer** should be deployed to a ASP.NET compatible host, like Azure or Appharbor. For Appharbor deployment, following [this steps to configure your Forge Client ID & Secret](http://adndevblog.typepad.com/cloud_and_mobile/2017/01/deploying-forge-aspnet-samples-to-appharbor.html).
