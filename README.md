@@ -5,6 +5,8 @@
 [![ASP.NET](https://img.shields.io/badge/ASP.NET-4.5-blue.svg)](https://asp.net/)
 [![License](http://img.shields.io/:license-mit-blue.svg)](http://opensource.org/licenses/MIT)
 
+[![Model-Derivative](https://img.shields.io/badge/Model%20Derivative-v2-green.svg)](http://developer.autodesk.com/)
+
 # Description
 
 This sample will add a Windows Explorer context menu "Extract Properties" for Revit files. The desktop app will upload the .RVT to the Forge Model Derivative API, translate and extract all properties into a Excel file. It was written in C# for Windows (tested on Windows 10) and it includes 3 projects: 
