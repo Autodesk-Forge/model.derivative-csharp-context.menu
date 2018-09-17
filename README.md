@@ -27,7 +27,7 @@ The new option should appear on the Windows Explorer right-click context menu:
 
 A notification ballon indicate the overall process:
 
-![thumbnail](notifications.png)
+![thumbnail](/thumbnail.png)
 
 When ready, the Excel file will be downloaded to the same folder as the original Revit file.
 
