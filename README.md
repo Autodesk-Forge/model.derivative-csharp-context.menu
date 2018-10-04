@@ -40,7 +40,7 @@ This sample keeps all Forge related information on the **TranslationServer** and
 ## Prerequisites
 
 1. **Forge Account**: Learn how to create a Forge Account, activate subscription and create an app at [this tutorial](http://learnforge.autodesk.io/#/account/). 
-2. **Visual Studio**: Either Community (Windows) or Code (Windows, MacOS).
+2. **Visual Studio**: Community version or higher (Professional/Enterprise)
 3. **.NET** basic knowledge with C#
 
 ## Running Locally
