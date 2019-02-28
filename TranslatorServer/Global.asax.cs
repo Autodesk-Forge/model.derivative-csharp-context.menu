@@ -24,6 +24,7 @@ namespace TranslatorServer
     {
         protected void Application_Start()
         {
+            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
             GlobalConfiguration.Configure(WebApiConfig.Register);
         }
     }
